@@ -14,6 +14,7 @@
 
 #include <QMainWindow>
 
+class QListWidgetItem;
 class EpubManager;
 //class EpubParser;
 
@@ -29,10 +30,17 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+signals:
+
+
 private slots:
 	void on_actionAdd_triggered();
 	void on_actionDelete_triggered();
 	void on_actionExit_triggered();
+
+	void AddListItem(QString key);
+	void DeleteListItem(QListWidgetItem* item);
+	void UpdateListItem();
 
 private:
 

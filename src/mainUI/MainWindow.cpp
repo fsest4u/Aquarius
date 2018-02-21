@@ -8,11 +8,12 @@
 **
 *************************************************************************/
 
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "ui_MainWindow.h"
 
 #include <QtDebug>
 #include <QtCore/QStandardPaths>
+#include <QtCore/QVariant>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMessageBox>
@@ -31,15 +32,17 @@ static const QString SETTINGS_GROUP = "mainWindow";
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 	, ui(new Ui::MainWindow)
-	, m_EpubManager(new EpubManager())
+	, m_EpubManager(new EpubManager(this))
 	//, m_EpubParser(new EpubParser())
 {
     ui->setupUi(this);
 
 	ReadSetting();
+	ConnectSignalsToSlots();
 
 	m_EpubManager->GetBookListCtrl()->OpenBookList();
-	QStringList sortList = m_EpubManager->GetBookListCtrl()->GetSortedList(0);	// SORT_NONE
+	int sortType = m_EpubManager->GetBookListCtrl()->GetSortType();
+	QStringList sortList = m_EpubManager->GetBookListCtrl()->GetSortedList(sortType);
 	foreach(QString sortItem, sortList) {
 		QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
 		item->setData(Qt::UserRole, QVariant(sortItem));
@@ -91,34 +94,37 @@ void MainWindow::WriteSetting()
 
 void MainWindow::ConnectSignalsToSlots()
 {
-
+	connect(ui->listWidget, SIGNAL(itemPressed(QListWidgetItem *)), m_EpubManager, SLOT(OnItemPressed(QListWidgetItem *)));
+	connect(ui->listWidget, SIGNAL(itemClicked(QListWidgetItem *)), m_EpubManager, SLOT(OnItemClicked(QListWidgetItem *)));
+	connect(ui->listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)), m_EpubManager, SLOT(OnItemDoubleClicked(QListWidgetItem *)));
+#if 0	// block mouse event
+	connect(ui->listWidget, SIGNAL(currentItemChanged(QListWidgetItem * , QListWidgetItem * )), m_EpubManager, SLOT(OnCurrentItemChanged(QListWidgetItem * , QListWidgetItem * )));
+	connect(ui->listWidget, SIGNAL(currentRowChanged(int )), m_EpubManager, SLOT(OnCurrentRowChanged(int )));
+	connect(ui->listWidget, SIGNAL(currentTextChanged(const QString & )), m_EpubManager, SLOT(OnCurrentTextChanged(const QString & )));
+	connect(ui->listWidget, SIGNAL(itemActivated(QListWidgetItem * )), m_EpubManager, SLOT(OnItemActivated(QListWidgetItem * )));
+	connect(ui->listWidget, SIGNAL(itemChanged(QListWidgetItem * )), m_EpubManager, SLOT(OnItemChanged(QListWidgetItem * )));
+	connect(ui->listWidget, SIGNAL(itemEntered(QListWidgetItem * )), m_EpubManager, SLOT(OnItemEntered(QListWidgetItem * )));
+	connect(ui->listWidget, SIGNAL(itemSelectionChanged()), m_EpubManager, SLOT(OnItemSelectionChanged()));
+#endif
 }
 
 
 void MainWindow::on_actionAdd_triggered()
 {
 	qDebug() << "on_actionAdd_triggered()";
-	ui->listWidget->clear();
-	int sortType = m_EpubManager->GetBookListCtrl()->GetSortType();
-
 	m_EpubManager->AddEpubList();
-	QStringList sortList = m_EpubManager->GetBookListCtrl()->GetSortedList(sortType);
-	foreach(QString sortItem, sortList) {
-		QListWidgetItem *item = new QListWidgetItem();
-		item->setData(Qt::UserRole, QVariant(sortItem));
-		ui->listWidget->setItemWidget(item, new QLabel(sortItem));
-	}
-
 }
 
 void MainWindow::on_actionDelete_triggered()
 {
 	qDebug() << "on_actionDelete_triggered()";
+	// single item
 	QListWidgetItem* item = ui->listWidget->currentItem();
 	if (item && m_EpubManager->DeleteEpub(item->data(Qt::UserRole).toString())) {
 		ui->listWidget->removeItemWidget(item);
 		ui->listWidget->takeItem(ui->listWidget->currentRow());
 	}
+	// multi item??
 }
 
 void MainWindow::on_actionExit_triggered()
@@ -133,3 +139,31 @@ void MainWindow::on_actionExit_triggered()
 	}
 }
 
+void MainWindow::AddListItem(QString key)
+{
+	qDebug() << "MainWindow - AddListItem()";
+	QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
+	item->setData(Qt::UserRole, QVariant(key));
+	ui->listWidget->setItemWidget(item, new QLabel(key));
+}
+
+void MainWindow::UpdateListItem()
+{
+	qDebug() << "MainWindow - UpdateListItem()";
+	int sortType = m_EpubManager->GetBookListCtrl()->GetSortType();
+	QStringList sortList = m_EpubManager->GetBookListCtrl()->GetSortedList(sortType);
+	foreach(QString sortItem, sortList) {
+		QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
+		item->setData(Qt::UserRole, QVariant(sortItem));
+		ui->listWidget->setItemWidget(item, new QLabel(sortItem));
+	}
+}
+
+void MainWindow::DeleteListItem(QListWidgetItem* item)
+{
+	qDebug() << "MainWindow - DeleteListItem()";
+	if (item) {
+		ui->listWidget->removeItemWidget(item);
+		ui->listWidget->takeItem(ui->listWidget->currentRow());
+	}
+}
