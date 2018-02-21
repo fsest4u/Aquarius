@@ -14,6 +14,7 @@
 #include <QtDebug>
 #include <QtCore/QStandardPaths>
 #include <QtWidgets/QFileDialog>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMessageBox>
 
 
@@ -38,6 +39,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	ReadSetting();
 
 	m_EpubManager->GetBookListCtrl()->OpenBookList();
+	QStringList sortList = m_EpubManager->GetBookListCtrl()->GetSortedList(0);	// SORT_NONE
+	foreach(QString sortItem, sortList) {
+		QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
+		item->setData(Qt::UserRole, QVariant(sortItem));
+		ui->listWidget->setItemWidget(item, new QLabel(sortItem));
+	}
 }
 
 MainWindow::~MainWindow()
@@ -91,14 +98,28 @@ void MainWindow::ConnectSignalsToSlots()
 void MainWindow::on_actionAdd_triggered()
 {
 	qDebug() << "on_actionAdd_triggered()";
+	ui->listWidget->clear();
+	int sortType = m_EpubManager->GetBookListCtrl()->GetSortType();
+
 	m_EpubManager->AddEpubList();
+	QStringList sortList = m_EpubManager->GetBookListCtrl()->GetSortedList(sortType);
+	foreach(QString sortItem, sortList) {
+		QListWidgetItem *item = new QListWidgetItem();
+		item->setData(Qt::UserRole, QVariant(sortItem));
+		ui->listWidget->setItemWidget(item, new QLabel(sortItem));
+	}
+
 }
 
-//void MainWindow::on_actionDelete_triggered()
-//{
-//	qDebug() << "on_actionDelete_triggered()";
-//	m_EpubManager->DeleteEpub();
-//}
+void MainWindow::on_actionDelete_triggered()
+{
+	qDebug() << "on_actionDelete_triggered()";
+	QListWidgetItem* item = ui->listWidget->currentItem();
+	if (item && m_EpubManager->DeleteEpub(item->data(Qt::UserRole).toString())) {
+		ui->listWidget->removeItemWidget(item);
+		ui->listWidget->takeItem(ui->listWidget->currentRow());
+	}
+}
 
 void MainWindow::on_actionExit_triggered()
 {

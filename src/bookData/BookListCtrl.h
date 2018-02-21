@@ -23,19 +23,26 @@ class BookListCtrl : QObject
 	Q_OBJECT
 
 public:
+
+	enum SortType {
+		SORT_NONE = 0,
+		SORT_AUTHOR,
+		SORT_TITLE,
+		SORT_DOWNTIME,
+		SORT_READTIME,
+		SORT_MAX
+	};
+
 	explicit BookListCtrl(QObject *parent = 0);
 	virtual ~BookListCtrl();
 
-	QString GetSortType() { return m_SortType; }
-	QString GetGenreType() { return m_GenreType; }
+	int GetSortType() { return (int)m_SortType; }
+	QString GetGenre() { return m_Genre; }
 	QString GetLibrary() { return m_Library; }
 	QString GetAuthor() { return m_Author; }
 	QString GetTitle() { return m_Title; }
 
-	QStringList GetSortedListByAuthor();
-	QStringList GetSortedListByTitle();
-	QStringList GetSortedListByDownTime();
-	QStringList GetSortedListByReadTime();
+	QStringList GetSortedList(int sortType);
 
 	QStringList GetFilteredListByGenre();
 	QStringList GetFilteredListByLibrary();
@@ -62,8 +69,13 @@ private:
 
 	void ConnectSignalsToSlots();
 
-	QString m_SortType;
-	QString m_GenreType;
+	QStringList GetSortedListByAuthor();
+	QStringList GetSortedListByTitle();
+	QStringList GetSortedListByDownTime();
+	QStringList GetSortedListByReadTime();
+
+	SortType m_SortType;
+	QString m_Genre;
 	QString m_Library;
 	QString m_Author;
 	QString m_Title;

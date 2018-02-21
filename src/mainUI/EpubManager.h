@@ -30,7 +30,7 @@ public:
     virtual ~EpubManager();
 
 	bool AddEpubList();
-	bool DeleteEpub();
+	bool DeleteEpub(QString key);
 
 	BookListCtrl*	GetBookListCtrl() { return m_BookListCtrl; }
 

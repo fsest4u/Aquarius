@@ -13,8 +13,35 @@
   <property name="windowTitle">
    <string>Aquarius Reader</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resFiles/resources.qrc">
+    <normaloff>:/aquarius.png</normaloff>:/aquarius.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout"/>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QListWidget" name="listWidget">
+      <property name="iconSize">
+       <size>
+        <width>48</width>
+        <height>48</height>
+       </size>
+      </property>
+      <property name="resizeMode">
+       <enum>QListView::Adjust</enum>
+      </property>
+      <property name="gridSize">
+       <size>
+        <width>48</width>
+        <height>48</height>
+       </size>
+      </property>
+      <property name="viewMode">
+       <enum>QListView::ListMode</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -47,9 +74,9 @@
      <string>Genre</string>
     </property>
     <addaction name="actionAll"/>
-    <addaction name="actionGeneral"/>
-    <addaction name="actionFantasy"/>
     <addaction name="actionRomance"/>
+    <addaction name="actionFantasy"/>
+    <addaction name="actionGeneral"/>
     <addaction name="actionEtc"/>
    </widget>
    <widget class="QMenu" name="menuSetting">
@@ -94,66 +121,105 @@
    </property>
   </action>
   <action name="actionAll">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>All</string>
    </property>
   </action>
   <action name="actionFantasy">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Fantasy</string>
    </property>
   </action>
   <action name="actionRomance">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Romance</string>
    </property>
   </action>
   <action name="actionEtc">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Etc</string>
    </property>
   </action>
   <action name="actionGeneral">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>General</string>
    </property>
   </action>
   <action name="actionRecentDownload">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Recently download</string>
    </property>
   </action>
   <action name="actionTitle">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Title</string>
    </property>
   </action>
   <action name="actionAuthor">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Author</string>
    </property>
   </action>
   <action name="actionRecentlyRead">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Recently read</string>
    </property>
   </action>
   <action name="actionInfo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Info</string>
    </property>
   </action>
   <action name="actionSetting">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Setting</string>
    </property>
   </action>
   <action name="actionLogin">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Login</string>
    </property>
   </action>
   <action name="actionSync">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Sync</string>
    </property>

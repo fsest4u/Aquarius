@@ -154,15 +154,21 @@ bool EpubManager::AddEpubList()
 
 }
 
-bool EpubManager::DeleteEpub()
+bool EpubManager::DeleteEpub(QString key)
 {
 	qDebug() << "EpubManager - DeleteEpub()";
 	QMessageBox::StandardButton btn;
-	btn = QMessageBox::question(this, tr(QCoreApplication::applicationName().toStdString().c_str()), tr("Are you sure you want to delete the file?"), QMessageBox::Ok | QMessageBox::Cancel);
+	btn = QMessageBox::question(this, tr(QCoreApplication::applicationName().toStdString().c_str())
+								, tr("Are you sure you want to delete the file?"), QMessageBox::Ok | QMessageBox::Cancel);
 
 	if (btn == QMessageBox::Ok) {
-		QString key;
 		m_BookListCtrl->DeleteBookItem(key);
+		// to remove directory
+		QString removePath = AQUARIUS_LOCATION_TEMP + "/" + key;
+		QDir dir(removePath);
+		if (dir.exists()) {
+			dir.removeRecursively();
+		}
 		return true;
 	}
 

@@ -31,7 +31,7 @@ public:
 
 private slots:
 	void on_actionAdd_triggered();
-	//void on_actionDelete_triggered();
+	void on_actionDelete_triggered();
 	void on_actionExit_triggered();
 
 private:

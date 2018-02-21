@@ -35,8 +35,8 @@ const QString BOOKLIST_INFO = "booklistinfo";
 
 BookListCtrl::BookListCtrl(QObject *parent)
 	: QObject(parent)
-	, m_SortType("")
-	, m_GenreType("")
+	, m_SortType(SORT_NONE)
+	, m_Genre("")
 	, m_Library("")
 	, m_Author("")
 	, m_Title("")
@@ -58,6 +58,64 @@ void BookListCtrl::ConnectSignalsToSlots()
 {
 	connect(this, SIGNAL(ChangedBookList()), this, SLOT(SaveBookList()));
 
+}
+
+QStringList BookListCtrl::GetSortedList(int sortType)
+{
+	m_SortType = (SortType)sortType;
+
+	QStringList sortList;
+	switch (sortType)
+	{
+	case SORT_AUTHOR:
+	{
+		sortList = GetSortedListByAuthor();
+		break;
+	}
+	case SORT_TITLE:
+	{
+		sortList = GetSortedListByTitle();
+		break;
+	}
+	case SORT_DOWNTIME:
+	{
+		sortList = GetSortedListByDownTime();
+		break;
+	}
+	case SORT_READTIME:
+	{
+		sortList = GetSortedListByReadTime();
+		break;
+	}
+	default:
+	{
+		m_SortType = SORT_AUTHOR;
+		sortList = GetSortedListByAuthor();
+		break;
+	}
+	}
+
+	return sortList;
+}
+
+QStringList BookListCtrl::GetSortedListByAuthor()
+{
+	return m_BookListInfo->GetBookListAuthor();
+}
+
+QStringList BookListCtrl::GetSortedListByTitle()
+{
+	return m_BookListInfo->GetBookListTitle();
+}
+
+QStringList BookListCtrl::GetSortedListByDownTime()
+{
+	return m_BookListInfo->GetBookListDownTime();
+}
+
+QStringList BookListCtrl::GetSortedListByReadTime()
+{
+	return m_BookListInfo->GetBookListReadTime();
 }
 
 
@@ -153,7 +211,6 @@ bool BookListCtrl::OpenBookList()
 		if (dir.exists()) {
 			dir.removeRecursively();
 		}
-
 	}
 
 	// draw book list
