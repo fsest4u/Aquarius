@@ -4,20 +4,19 @@
 **
 **  This file is part of Aquarius.
 **
-**  Aquarius is Epub PC Viewer.
+**  Aquarius is Epub Manager.
 **
 *************************************************************************/
 
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
-
-#include <QtDebug>
+#include <QtCore/QtDebug>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QVariant>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMessageBox>
 
+#include "MainWindow.h"
+#include "ui_MainWindow.h"
 
 #include "EpubManager.h"
 #include "EpubParser.h"

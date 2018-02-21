@@ -1,5 +1,58 @@
 <RCC>
-  <qresource prefix="/">
-    <file>helloworld-transparent.png</file>
-  </qresource>
+    <qresource prefix="/">
+        <file>aquarius.png</file>
+        <file>pisces.png</file>
+        <file>virgo.png</file>
+    </qresource>
+    <qresource prefix="/romance">
+        <file>coverRomance/r00.jpg</file>
+        <file>coverRomance/r01.jpg</file>
+        <file>coverRomance/r02.jpg</file>
+        <file>coverRomance/r03.jpg</file>
+        <file>coverRomance/r04.jpg</file>
+        <file>coverRomance/r05.jpg</file>
+        <file>coverRomance/r06.jpg</file>
+        <file>coverRomance/r07.jpg</file>
+        <file>coverRomance/r08.jpg</file>
+        <file>coverRomance/r09.jpg</file>
+        <file>coverRomance/r10.jpg</file>
+        <file>coverRomance/r11.jpg</file>
+        <file>coverRomance/r12.jpg</file>
+        <file>coverRomance/r13.jpg</file>
+        <file>coverRomance/r14.jpg</file>
+    </qresource>
+    <qresource prefix="/fantage">
+        <file>coverFantage/f00.jpg</file>
+        <file>coverFantage/f01.jpg</file>
+        <file>coverFantage/f02.jpg</file>
+        <file>coverFantage/f03.jpg</file>
+        <file>coverFantage/f04.jpg</file>
+        <file>coverFantage/f05.jpg</file>
+        <file>coverFantage/f06.jpg</file>
+        <file>coverFantage/f07.jpg</file>
+        <file>coverFantage/f08.jpg</file>
+        <file>coverFantage/f09.jpg</file>
+        <file>coverFantage/f10.jpg</file>
+        <file>coverFantage/f11.jpg</file>
+        <file>coverFantage/f12.jpg</file>
+        <file>coverFantage/f13.jpg</file>
+        <file>coverFantage/f14.jpg</file>
+    </qresource>
+    <qresource prefix="/general">
+        <file>coverGeneral/g00.jpg</file>
+        <file>coverGeneral/g01.jpg</file>
+        <file>coverGeneral/g02.jpg</file>
+        <file>coverGeneral/g03.jpg</file>
+        <file>coverGeneral/g04.jpg</file>
+        <file>coverGeneral/g05.jpg</file>
+        <file>coverGeneral/g06.jpg</file>
+        <file>coverGeneral/g07.jpg</file>
+        <file>coverGeneral/g08.jpg</file>
+        <file>coverGeneral/g09.jpg</file>
+        <file>coverGeneral/g10.jpg</file>
+        <file>coverGeneral/g11.jpg</file>
+        <file>coverGeneral/g12.jpg</file>
+        <file>coverGeneral/g13.jpg</file>
+        <file>coverGeneral/g14.jpg</file>
+    </qresource>
 </RCC>

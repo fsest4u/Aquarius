@@ -4,7 +4,7 @@
 **
 **  This file is part of Aquarius.
 **
-**  Aquarius is Epub PC Viewer.
+**  Aquarius is Epub Manager.
 **
 *************************************************************************/
 
