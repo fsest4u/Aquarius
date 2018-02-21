@@ -26,4 +26,5 @@ set( AQUARIUS_CODE_NAME Aquarius )
 
 #########################################################
 
+add_subdirectory( 3rdparty/ )
 add_subdirectory( src/ )
