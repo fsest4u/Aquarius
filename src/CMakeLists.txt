@@ -24,6 +24,28 @@ set( MAIN_FILES
 set( MAINUI_FILES 
 	mainUI/MainWindow.h
 	mainUI/MainWindow.cpp
+	mainUI/EpubManager.h
+	mainUI/EpubManager.cpp
+)
+
+set( BOOKDATA_FILES 
+	bookData/BookInfo.h
+	bookData/BookInfo.cpp
+	bookData/BookListCtrl.h
+	bookData/BookListCtrl.cpp
+	bookData/BookListGeneral.h
+	bookData/BookListGeneral.cpp
+	bookData/BookListInfo.h
+	bookData/BookListInfo.cpp
+	bookData/BookListThumbnail.h
+	bookData/BookListThumbnail.cpp
+	bookData/BookListView.h
+	bookData/BookListView.cpp
+)
+
+set( MISC_FILES 
+	misc/SettingData.h
+	misc/SettingData.cpp
 )
 
 set( UI_FILES
@@ -34,7 +56,7 @@ set( QRC_FILES
 	resFiles/resources.qrc
 )
 
-set( RAW_SOURCES ${MAIN_FILES} ${MAINUI_FILES} )
+set( RAW_SOURCES ${MAIN_FILES} ${MAINUI_FILES} ${BOOKDATA_FILES} ${MISC_FILES} )
 
 #########################################################
 
@@ -55,7 +77,9 @@ qt5_add_translation( QM_FILES ${TS_FILES} )
 # Adds folders for Visual Studio solution explorer (and for Xcode explorer)
 source_group( "Form Files"        FILES ${UI_FILES} )
 source_group( "Resource Files"    FILES ${QRC_FILES} )
-source_group( "Main UI"            FILES ${MAINUI_FILES} )
+source_group( "Misc"              FILES ${MISC_FILES} )
+source_group( "Book Data"         FILES ${BOOKDATA_FILES} )
+source_group( "Main UI"           FILES ${MAINUI_FILES} )
 source_group( "Main Files"        FILES ${MAIN_FILES} )
 
 #########################################################
@@ -80,7 +104,7 @@ if (MSVC)
     set(QT_MAIN Qt5::WinMain)
 endif()
 
-target_link_libraries( ${PROJECT_NAME} ${QT_MAIN} ${HUNSPELL_LIBRARIES} ${PCRE_LIBRARIES} ${GUMBO_LIBRARIES} ${MINIZIP_LIBRARIES} ${PYTHON_LIBRARIES} ${TIDYLIB_LIBRARIES} )
+target_link_libraries( ${PROJECT_NAME} ${QT_MAIN} ${VIRGO_LIBRARIES} )
 qt5_use_modules(${PROJECT_NAME} Widgets Xml XmlPatterns PrintSupport Svg WebKit WebKitWidgets Network Concurrent Multimedia)
 
 #########################################################
