@@ -124,6 +124,7 @@ bool BookListCtrl::AddBookItem(BookInfo* bInfo)
 	QString key = bInfo->GetFilename();
 	if (!m_BookListInfo->IsContainBookList(key)) {
 		m_BookListInfo->AddBookListInfo(bInfo);
+		//refresh book list
 		emit ChangedBookList();
 		return true;
 	}
@@ -135,6 +136,7 @@ bool BookListCtrl::DeleteBookItem(QString key)
 {
 	if (m_BookListInfo->IsContainBookList(key)) {
 		m_BookListInfo->DeleteBookListInfo(key);
+		//refresh book list
 		emit ChangedBookList();
 		return true;
 	}
@@ -211,9 +213,9 @@ bool BookListCtrl::OpenBookList()
 		if (dir.exists()) {
 			dir.removeRecursively();
 		}
-	}
 
-	// draw book list
+		dir.mkdir(AQUARIUS_LOCATION_TEMP);
+	}
 
 	return true;
 }

@@ -42,6 +42,7 @@ EpubUtil::~EpubUtil()
 
 bool EpubUtil::EpubImport(const QString &zippath, const QString &destpath)
 {
+#if 0
 	QDir srcDir(destpath);
 	if (!srcDir.exists()) {
 		QFileInfo fileInfo(destpath);
@@ -50,7 +51,17 @@ bool EpubUtil::EpubImport(const QString &zippath, const QString &destpath)
 		QString filename = fileInfo.completeBaseName();
 		dstDir.mkdir(filename);
 	}
-	return UnZip(zippath, destpath);
+#else
+	QDir dir(destpath);
+	if (!dir.exists()) {
+		dir.mkdir(destpath);
+		return UnZip(zippath, destpath);
+	}
+	else {
+		return false;
+	}
+
+#endif
 }
 
 bool EpubUtil::EpubExport(const QString &fullfolderpath, const QString &fullfilepath)

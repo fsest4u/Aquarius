@@ -44,10 +44,11 @@ private slots:
 
 private:
 
-	void ConnectSignalsToSlots();
-
 	void ReadSetting();
 	void WriteSetting();
+
+	void InitUI();
+	void ConnectSignalsToSlots();
 
 	EpubManager*	m_EpubManager;
 	//EpubParser*		m_EpubParser;

@@ -125,7 +125,7 @@ BookInfo* EpubManager::CovertBookInfo(QFileInfo& fileInfo)
 bool EpubManager::AddEpubList()
 {
 	qDebug() << "EpubManager - AddEpubList()";
-	bool ret = false;
+	bool bError = false;
 	QString filter = "Epubs (*.epub)";
 	m_LastFolderOpenList = QFileDialog::getOpenFileNames(this, tr("Add the Epub Files"), m_LastFolderOpen, filter);
 	if (!m_LastFolderOpenList.empty()) {
@@ -147,44 +147,55 @@ bool EpubManager::AddEpubList()
 					emit AddListItem(bInfo->GetFilename());
 				}
 				else {
-					QMessageBox::warning(this, tr(QCoreApplication::applicationName().toStdString().c_str()), tr(QString("Unable to parse epub file. - %1").arg(fileInfo.fileName()).toStdString().c_str()));
+					bError = true;
+					QMessageBox::warning(this, tr(QCoreApplication::applicationName().toStdString().c_str())
+						, tr(QString("Unable to parse epub file. - %1").arg(fileInfo.fileName()).toStdString().c_str()));
 				}
 			}
 			else {
-				QMessageBox::warning(this, tr(QCoreApplication::applicationName().toStdString().c_str()), tr(QString("Unable to read epub file. - %1").arg(fileInfo.fileName()).toStdString().c_str()));
+				bError = true;
+				QMessageBox::warning(this, tr(QCoreApplication::applicationName().toStdString().c_str())
+					, tr(QString("Already exists or Unable to read epub file. - %1").arg(fileInfo.fileName()).toStdString().c_str()));
 			}
 		}
 	}
 	else {
-		QMessageBox::warning(this, tr(QCoreApplication::applicationName().toStdString().c_str()), tr("No items selected."));
+		QMessageBox::warning(this, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("No items selected."));
 		return false;
 	}
 
+	if (bError) {
+		QMessageBox::information(this, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("Check a epub file."));
+
+	}
+	else {
+		QMessageBox::information(this, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("Success to add epub file."));
+	}
 	//emit UpdateListItem();
-	QMessageBox::information(this, tr(QCoreApplication::applicationName().toStdString().c_str()), tr("Success to add epub file."));
 	return true;
 }
 
-bool EpubManager::DeleteEpub(QString key)
+bool EpubManager::DeleteEpub(QListWidgetItem* item)
 {
-	qDebug() << "EpubManager - DeleteEpub()";
-	QMessageBox::StandardButton btn;
-	btn = QMessageBox::question(this, tr(QCoreApplication::applicationName().toStdString().c_str())
-								, tr("Are you sure you want to delete the file?"), QMessageBox::Ok | QMessageBox::Cancel);
-
-	if (btn == QMessageBox::Ok) {
-		m_BookListCtrl->DeleteBookItem(key);
-		// to remove directory
-		QString removePath = AQUARIUS_LOCATION_TEMP + "/" + key;
-		QDir dir(removePath);
-		if (dir.exists()) {
-			dir.removeRecursively();
-		}
-		return true;
+	bool ret = false;
+	QString key = item->data(Qt::UserRole).toString();
+	qDebug() << "EpubManager - DeleteEpub() key[ " << key <<" ]" ;
+	m_BookListCtrl->DeleteBookItem(key);
+	// to remove directory
+	QString removePath = AQUARIUS_LOCATION_TEMP + "/" + key;
+	QDir dir(removePath);
+	if (dir.exists()) {
+		dir.removeRecursively();
+		ret = true;
 	}
-
-	return false;
-
+	else {
+		ret = false;
+	}
+	emit DeleteListItem(item);
+	return ret;
 }
 
 void EpubManager::OnItemPressed(QListWidgetItem * item)
@@ -197,13 +208,17 @@ void EpubManager::OnItemClicked(QListWidgetItem * item)
 {
 	qDebug() << "EpubManager - OnItemClicked() - mouse left button up";
 	double releaseTime = QDateTime::currentMSecsSinceEpoch() - m_LastPressTime;
-	qDebug() << "EpubManager - releaseTime " << releaseTime;
+	//qDebug() << "EpubManager - releaseTime " << releaseTime;
 	if (releaseTime > LONG_PRESS_TIME_THRESHOLD) {
-		if (item && DeleteEpub(item->data(Qt::UserRole).toString())) {
-			//if (item) {
-			emit DeleteListItem(item);
-		}
+		QMessageBox::StandardButton btn;
+		btn = QMessageBox::question(this, tr(QCoreApplication::applicationName().toStdString().c_str())
+			, tr("Are you sure you want to delete the file?"), QMessageBox::Ok | QMessageBox::Cancel);
 
+		if (btn == QMessageBox::Ok) {
+			if (item) {
+				DeleteEpub(item);
+			}
+		}
 	}
 }
 
@@ -212,7 +227,7 @@ void EpubManager::OnItemDoubleClicked(QListWidgetItem * item)
 	qDebug() << "EpubManager - OnItemDoubleClicked()";
 }
 
-#if 1
+#if 0	// block mouse event
 void EpubManager::OnCurrentItemChanged(QListWidgetItem * current, QListWidgetItem * previous)
 {
 	qDebug() << "EpubManager - OnCurrentItemChanged()";

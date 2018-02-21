@@ -71,8 +71,6 @@ void BookListInfo::AddBookListInfo(BookInfo* bInfo)
 	m_BookListTitle->insert(QString(bInfo->GetTitle() + key).toLower(), key);
 	m_BookListDownTime->insert(QString(downTime + key).toLower(), key);
 	m_BookListReadTime->insert(QString(readTime + key).toLower(), key);
-
-	//refresh book list
 }
 
 void BookListInfo::DeleteBookListInfo(QString key)
@@ -82,6 +80,4 @@ void BookListInfo::DeleteBookListInfo(QString key)
 	m_BookListTitle->remove(m_BookListTitle->key(key));
 	m_BookListDownTime->remove(m_BookListDownTime->key(key));
 	m_BookListReadTime->remove(m_BookListReadTime->key(key));
-
-	//refresh book list
 }

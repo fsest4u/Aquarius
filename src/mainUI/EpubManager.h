@@ -33,7 +33,7 @@ public:
     virtual ~EpubManager();
 
 	bool AddEpubList();
-	bool DeleteEpub(QString key);
+	bool DeleteEpub(QListWidgetItem* item);
 
 	BookListCtrl*	GetBookListCtrl() { return m_BookListCtrl; }
 
@@ -48,7 +48,7 @@ public slots:
 	void OnItemPressed(QListWidgetItem * item);
 	void OnItemClicked(QListWidgetItem * item);
 	void OnItemDoubleClicked(QListWidgetItem * item);
-#if 1
+#if 0	// block mouse event
 	void OnCurrentItemChanged(QListWidgetItem * current, QListWidgetItem * previous);
 	void OnCurrentRowChanged(int currentRow);
 	void OnCurrentTextChanged(const QString & currentText);
@@ -62,6 +62,7 @@ private:
 
 	void			ReadSetting();
 	void			WriteSetting();
+
 	void			ConnectSignalsToSlots();
 
 	BookInfo*		CovertBookInfo(QFileInfo& fileInfo);

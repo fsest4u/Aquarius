@@ -23,6 +23,7 @@
 #include "EpubParser.h"
 #include "bookData/BookListCtrl.h"
 #include "misc/SettingData.h"
+#include "AquariusContants.h"
 
 
 
@@ -38,16 +39,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
 	ReadSetting();
+	InitUI();
 	ConnectSignalsToSlots();
-
-	m_EpubManager->GetBookListCtrl()->OpenBookList();
-	int sortType = m_EpubManager->GetBookListCtrl()->GetSortType();
-	QStringList sortList = m_EpubManager->GetBookListCtrl()->GetSortedList(sortType);
-	foreach(QString sortItem, sortList) {
-		QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
-		item->setData(Qt::UserRole, QVariant(sortItem));
-		ui->listWidget->setItemWidget(item, new QLabel(sortItem));
-	}
 }
 
 MainWindow::~MainWindow()
@@ -92,6 +85,27 @@ void MainWindow::WriteSetting()
 	settings.endGroup();
 }
 
+void MainWindow::InitUI()
+{
+	QDir dir(AQUARIUS_LOCATION_TEMP);
+	if (!dir.exists()) {
+		dir.mkdir(AQUARIUS_LOCATION_TEMP);
+	}
+
+	ui->listWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+	m_EpubManager->GetBookListCtrl()->OpenBookList();
+	//draw book list
+	int sortType = m_EpubManager->GetBookListCtrl()->GetSortType();
+	QStringList sortList = m_EpubManager->GetBookListCtrl()->GetSortedList(sortType);
+	foreach(QString sortItem, sortList) {
+		QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
+		item->setData(Qt::UserRole, QVariant(sortItem));
+		ui->listWidget->setItemWidget(item, new QLabel(sortItem));
+	}
+
+}
+
 void MainWindow::ConnectSignalsToSlots()
 {
 	connect(ui->listWidget, SIGNAL(itemPressed(QListWidgetItem *)), m_EpubManager, SLOT(OnItemPressed(QListWidgetItem *)));
@@ -118,13 +132,19 @@ void MainWindow::on_actionAdd_triggered()
 void MainWindow::on_actionDelete_triggered()
 {
 	qDebug() << "on_actionDelete_triggered()";
-	// single item
-	QListWidgetItem* item = ui->listWidget->currentItem();
-	if (item && m_EpubManager->DeleteEpub(item->data(Qt::UserRole).toString())) {
-		ui->listWidget->removeItemWidget(item);
-		ui->listWidget->takeItem(ui->listWidget->currentRow());
+	// multi item
+	QList<QListWidgetItem*> itemList = ui->listWidget->selectedItems();
+	QMessageBox::StandardButton btn;
+	btn = QMessageBox::question(this, tr(QCoreApplication::applicationName().toStdString().c_str())
+		, tr("Are you sure you want to delete the file or files?"), QMessageBox::Ok | QMessageBox::Cancel);
+
+	if (btn == QMessageBox::Ok) {
+		foreach(QListWidgetItem* item, itemList) {
+			if (item) {
+				m_EpubManager->DeleteEpub(item);
+			}
+		}
 	}
-	// multi item??
 }
 
 void MainWindow::on_actionExit_triggered()
@@ -163,6 +183,7 @@ void MainWindow::DeleteListItem(QListWidgetItem* item)
 {
 	qDebug() << "MainWindow - DeleteListItem()";
 	if (item) {
+		qDebug() << "item[ " << item->data(Qt::UserRole).toString() << " ]";
 		ui->listWidget->removeItemWidget(item);
 		ui->listWidget->takeItem(ui->listWidget->currentRow());
 	}
