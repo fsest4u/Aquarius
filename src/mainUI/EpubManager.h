@@ -13,11 +13,13 @@
 #define EPUB_MANAGER_H
 
 #include <QtWidgets/QWidget>
+#include <QtCore/QFileInfo>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 
 class EpubParser;
 class BookListCtrl;
+class BookInfo;
 
 
 class EpubManager : public QWidget
@@ -30,17 +32,21 @@ public:
 	bool AddEpubList();
 	bool DeleteEpub();
 
+	BookListCtrl*	GetBookListCtrl() { return m_BookListCtrl; }
+
 
 private:
 
-	void ReadSetting();
-	void WriteSetting();
+	void			ReadSetting();
+	void			WriteSetting();
+
+	BookInfo*		CovertBookInfo(QFileInfo& fileInfo);
 
 	EpubParser*		m_EpubParser;
 	BookListCtrl*	m_BookListCtrl;
 
-	QString		m_LastFolderOpen;
-	QStringList m_LastFolderOpenList;
+	QString			m_LastFolderOpen;
+	QStringList		m_LastFolderOpenList;
 
 
 

@@ -19,6 +19,7 @@ set(CMAKE_AUTOMOC ON)
 
 set( MAIN_FILES
 	main.cpp
+	AquariusContants.h
 )
 
 set( MAINUI_FILES 

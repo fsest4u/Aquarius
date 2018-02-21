@@ -12,22 +12,23 @@
 
 #include <QtDebug>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QDateTime>
 #include <QtCore/QStandardPaths>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
 
-
 #include "EpubParser.h"
+#include "AquariusContants.h"
 #include "bookData/BookListCtrl.h"
 #include "bookData/BookInfo.h"
 #include "misc/SettingData.h"
 
 
 
-static const QString SETTINGS_GROUP = "epubmanager";
+const QString SETTINGS_GROUP = "epubmanager";
 
-static const QString AQUARIUS_LOCATION_DOCUMENTS = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/aquarius";
-static const QString AQUARIUS_LOCATION_TEMP = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/aquarius";
+const QString AQUARIUS_LOCATION_DOCUMENTS = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/aquarius";
+const QString AQUARIUS_LOCATION_TEMP = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/aquarius";
 
 
 
@@ -91,6 +92,23 @@ void EpubManager::WriteSetting()
 	settings.endGroup();
 }
 
+BookInfo* EpubManager::CovertBookInfo(QFileInfo& fileInfo)
+{
+	BookInfo* bInfo = new BookInfo();
+
+	bInfo->SetFilename(fileInfo.completeBaseName());
+	bInfo->SetTitle(m_EpubParser->GetMetadataTitle());
+	bInfo->SetAuthor(m_EpubParser->GetMetadataAuthor());
+	bInfo->SetGenre(m_EpubParser->GetMetadataGenre());
+	bInfo->SetDownloadTime(fileInfo.lastModified());
+	bInfo->SetReadTime(fileInfo.lastRead());
+	bInfo->SetFilesize(fileInfo.size());
+	bInfo->SetCoverPath(m_EpubParser->GetMetadataCoverPath());
+	bInfo->SetLibrary("");
+
+	return bInfo;
+}
+
 bool EpubManager::AddEpubList()
 {
 	qDebug() << "EpubManager - AddEpubList()";
@@ -109,8 +127,10 @@ bool EpubManager::AddEpubList()
 			if (m_EpubParser->EpubRead()) {
 				// to parse epub
 				if (m_EpubParser->EpubParsing()) {
+
+					BookInfo* bInfo = CovertBookInfo(fileInfo);
 					// to add book item
-					m_BookListCtrl->AddBookItem();
+					m_BookListCtrl->AddBookItem(bInfo);
 					QMessageBox::information(this, tr(QCoreApplication::applicationName().toStdString().c_str()), tr("Success to add epub file."));
 					ret = true;
 				}
@@ -141,6 +161,8 @@ bool EpubManager::DeleteEpub()
 	btn = QMessageBox::question(this, tr(QCoreApplication::applicationName().toStdString().c_str()), tr("Are you sure you want to delete the file?"), QMessageBox::Ok | QMessageBox::Cancel);
 
 	if (btn == QMessageBox::Ok) {
+		QString key;
+		m_BookListCtrl->DeleteBookItem(key);
 		return true;
 	}
 

@@ -53,7 +53,7 @@ public:
 private:
     
 	QString					m_FolderPath;
-	QString					m_OPFFilePath;
+	QString					m_OPFFile;
 	QString					m_EpubVersion;
 	QString					m_EpubUniqueID;
 	Metadata*				m_Metadata;

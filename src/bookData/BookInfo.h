@@ -12,7 +12,8 @@
 #ifndef BOOKINFO_H
 #define BOOKINFO_H
 
-#include <QObject>
+#include <QtCore/QObject>
+#include <QtCore/QDateTime>
 
 class BookInfo
 {
@@ -28,12 +29,12 @@ public:
 	void SetAuthor(QString data) { m_Author = data; }
 	QString GetGenre() { return m_Genre; }
 	void SetGenre(QString data) { m_Genre = data; }
-	QString GetDownloadTime() { return m_DownloadTime; }
-	void SetDownloadTime(QString data) { m_DownloadTime = data; }
-	QString GetReadTime() { return m_ReadTime; }
-	void SetReadTime(QString data) { m_ReadTime = data; }
-	QString GetFilesize() { return m_Filesize; }
-	void SetFilesize(QString data) { m_Filesize = data; }
+	QDateTime GetDownloadTime() { return m_DownloadTime; }
+	void SetDownloadTime(QDateTime data) { m_DownloadTime = data; }
+	QDateTime GetReadTime() { return m_ReadTime; }
+	void SetReadTime(QDateTime data) { m_ReadTime = data; }
+	double GetFilesize() { return m_Filesize; }
+	void SetFilesize(double data) { m_Filesize = data; }
 	QString GetCoverPath() { return m_CoverPath; }
 	void SetCoverPath(QString data) { m_CoverPath = data; }
 	QString GetLibrary() { return m_Library; }
@@ -45,9 +46,9 @@ private:
 	QString m_Title;
 	QString m_Author;
 	QString m_Genre;
-	QString m_DownloadTime;
-	QString m_ReadTime;
-	QString m_Filesize;
+	QDateTime m_DownloadTime;
+	QDateTime m_ReadTime;
+	double m_Filesize;
 	QString m_CoverPath;
 	QString m_Library;
 

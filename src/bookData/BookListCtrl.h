@@ -16,8 +16,12 @@
 
 #include "BookListInfo.h"
 
+class BookInfo;
+
 class BookListCtrl : QObject
 {
+	Q_OBJECT
+
 public:
 	explicit BookListCtrl(QObject *parent = 0);
 	virtual ~BookListCtrl();
@@ -38,13 +42,25 @@ public:
 	QStringList GetFilteredListByAuthor();
 	QStringList GetFilteredListByTitle();
 
-	bool AddBookItem();
-	bool DeleteBookItem();
-	BookListInfo* GetBookListInfo();
-	BookInfo*	GetBookInfo();
+	bool AddBookItem(BookInfo* bInfo);
+	bool DeleteBookItem(QString key);
+
+	bool OpenBookList();
+
+	BookListInfo* GetBookListInfo() { return m_BookListInfo; }
+
+signals:
+
+	void ChangedBookList();
+
+private slots:
+
+	bool SaveBookList();
 
 
 private:
+
+	void ConnectSignalsToSlots();
 
 	QString m_SortType;
 	QString m_GenreType;

@@ -19,6 +19,7 @@
 
 #include "EpubManager.h"
 #include "EpubParser.h"
+#include "bookData/BookListCtrl.h"
 #include "misc/SettingData.h"
 
 
@@ -35,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
 	ReadSetting();
+
+	m_EpubManager->GetBookListCtrl()->OpenBookList();
 }
 
 MainWindow::~MainWindow()
@@ -79,17 +82,23 @@ void MainWindow::WriteSetting()
 	settings.endGroup();
 }
 
+void MainWindow::ConnectSignalsToSlots()
+{
+
+}
+
+
 void MainWindow::on_actionAdd_triggered()
 {
 	qDebug() << "on_actionAdd_triggered()";
 	m_EpubManager->AddEpubList();
 }
 
-void MainWindow::on_actionDelete_triggered()
-{
-	qDebug() << "on_actionDelete_triggered()";
-	m_EpubManager->DeleteEpub();
-}
+//void MainWindow::on_actionDelete_triggered()
+//{
+//	qDebug() << "on_actionDelete_triggered()";
+//	m_EpubManager->DeleteEpub();
+//}
 
 void MainWindow::on_actionExit_triggered()
 {

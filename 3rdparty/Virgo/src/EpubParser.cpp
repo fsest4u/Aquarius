@@ -117,7 +117,7 @@ QString EpubParser::GetOPFFilePath()
 		if (container.isStartElement() && container.name() == "rootfile") {
 			if (container.attributes().hasAttribute("media-type") &&
 				container.attributes().value("", "media-type") == OEBPS_MIMETYPE ) {
-				filepath = m_FolderPath + "/" + container.attributes().value("", "full-path").toString();
+				filepath = container.attributes().value("", "full-path").toString();
 				// As per OCF spec, the first rootfile element
 				// with the OEBPS mimetype is considered the "main" one.
 				break;
@@ -295,6 +295,32 @@ QString EpubParser::GetMetadataTitle()
 	if (!m_bOPFParse || !m_OPFData) { return QString(""); }
 	else return m_OPFData->GetMetadata()->GetMetadataTitle();
 }
+
+QString EpubParser::GetMetadataAuthor()
+{
+	if (!m_bOPFParse || !m_OPFData) { return QString(""); }
+	else return m_OPFData->GetMetadata()->GetMetadataCreator();
+}
+
+QString EpubParser::GetMetadataGenre()
+{
+	if (!m_bOPFParse || !m_OPFData) { return QString(""); }
+	else return m_OPFData->GetMetadata()->GetMetadataType();
+}
+
+QString EpubParser::GetMetadataCoverPath()
+{
+	if (!m_bOPFParse || !m_OPFData || m_OPFData->GetMetadata()->GetMetaItemList().length() > 0) { return QString(""); }
+	else {
+		QString id = m_OPFData->GetMetadata()->GetMetaItemByName("cover")->GetContent();
+		if (!id.isEmpty()) {
+			QString href = m_OPFData->GetMainfest()->GetItemByID(id)->GetHref();
+			return m_FolderPath + "/" + href;
+		}
+		else return QString("");
+	}
+}
+
 
 //////////////////////////////
 // Manifest

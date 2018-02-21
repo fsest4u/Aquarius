@@ -58,6 +58,9 @@ public:
 	// Metadata
 	//////////////////////////////
 	QString GetMetadataTitle();
+	QString GetMetadataAuthor();
+	QString GetMetadataGenre();
+	QString GetMetadataCoverPath();
 
 	//////////////////////////////
 	// Manifest

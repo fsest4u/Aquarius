@@ -22,7 +22,7 @@
 OPFData::OPFData(QObject *parent) :
 	QObject(parent)
 	, m_FolderPath("")
-	, m_OPFFilePath("")
+	, m_OPFFile("")
 	, m_EpubVersion("")
 	, m_EpubUniqueID("")
 	, m_Metadata(new Metadata())
@@ -64,14 +64,14 @@ OPFData::~OPFData()
 
 }
 
-bool OPFData::OPFParsing(QString folderpath, QString filepath)
+bool OPFData::OPFParsing(QString folderpath, QString filename)
 {
 	bool ret = false;
-	if (folderpath.isEmpty() || filepath.isEmpty()) return ret;
+	if (folderpath.isEmpty() || filename.isEmpty()) return ret;
 
 	m_FolderPath = folderpath;
-	m_OPFFilePath = filepath;
-	QString fullfilepath = m_FolderPath + "/" + m_OPFFilePath;
+	m_OPFFile = filename;
+	QString fullfilepath = m_FolderPath + "/" + m_OPFFile;
 	QFile file(fullfilepath);
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 		return ret;

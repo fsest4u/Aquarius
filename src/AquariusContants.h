@@ -7,24 +7,15 @@
 **  Aquarius is Epub PC Viewer.
 **
 *************************************************************************/
-#include "BookInfo.h"
 
+#pragma once
+#ifndef AQUARIUS_CONTANTS_H
+#define AQUARIUS_CONTANTS_H
 
+class QString;
+class QStringList;
 
-BookInfo::BookInfo()
-	: m_Filename("")
-	, m_Title("")
-	, m_Author("")
-	, m_Genre("")
-	//, m_DownloadTime("")
-	//, m_ReadTime("")
-	, m_Filesize(0.0)
-	, m_CoverPath("")
-	, m_Library("")
-{
-}
+extern const QString AQUARIUS_LOCATION_DOCUMENTS;
+extern const QString AQUARIUS_LOCATION_TEMP;
 
-
-BookInfo::~BookInfo()
-{
-}
+#endif	// AQUARIUS_CONTANTS_H
