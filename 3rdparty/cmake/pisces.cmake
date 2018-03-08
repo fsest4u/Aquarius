@@ -9,7 +9,10 @@
 
 cmake_minimum_required( VERSION 3.0.0 ) 
 
-project( Aquarius )
+project( Pisces )
+
+set( PISCES_LIBRARIES ${PROJECT_NAME} CACHE INTERNAL "" )
+set( PISCES_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}/src CACHE INTERNAL "" )
 
 #########################################################
 
@@ -18,46 +21,36 @@ find_package(Qt5 5.4 COMPONENTS Core Network Svg WebKit WebKitWidgets Widgets Xm
 set(CMAKE_AUTOMOC ON)
 
 set( MAIN_FILES
-	main.cpp
-	AquariusContants.h
+	${PROJECT_NAME}/src/main.cpp
+    ${PROJECT_NAME}/src/PiscesConstants.h
+	${PROJECT_NAME}/src/PiscesFeatures.h
 )
 
 set( MAINUI_FILES 
-	mainUI/MainWindow.h
-	mainUI/MainWindow.cpp
-	mainUI/EpubManager.h
-	mainUI/EpubManager.cpp
-)
-
-set( BOOKDATA_FILES 
-	bookData/BookInfo.h
-	bookData/BookInfo.cpp
-	bookData/BookListCtrl.h
-	bookData/BookListCtrl.cpp
-	bookData/BookListGeneral.h
-	bookData/BookListGeneral.cpp
-	bookData/BookListInfo.h
-	bookData/BookListInfo.cpp
-	bookData/BookListThumbnail.h
-	bookData/BookListThumbnail.cpp
-	bookData/BookListView.h
-	bookData/BookListView.cpp
+	${PROJECT_NAME}/src/mainUI/MainWindow.h
+	${PROJECT_NAME}/src/mainUI/MainWindow.cpp
+	${PROJECT_NAME}/src/mainUI/FileManager.h
+	${PROJECT_NAME}/src/mainUI/FileManager.cpp
 )
 
 set( MISC_FILES 
-	misc/SettingData.h
-	misc/SettingData.cpp
+    ${PROJECT_NAME}/src/misc/SettingData.h
+    ${PROJECT_NAME}/src/misc/SettingData.cpp
+    ${PROJECT_NAME}/src/misc/RequestMapper.h
+    ${PROJECT_NAME}/src/misc/RequestMapper.cpp
+	${PROJECT_NAME}/src/misc/Utility.h
+	${PROJECT_NAME}/src/misc/Utility.cpp
 )
 
 set( UI_FILES
-	formFiles/MainWindow.ui
+	${PROJECT_NAME}/src/formFiles/MainWindow.ui
 )
 
 set( QRC_FILES
-	resFiles/resources.qrc
+	${PROJECT_NAME}/src/resFiles/resources.qrc
 )
 
-set( RAW_SOURCES ${MAIN_FILES} ${MAINUI_FILES} ${BOOKDATA_FILES} ${MISC_FILES} )
+set( RAW_SOURCES ${MAIN_FILES} ${MAINUI_FILES} ${MISC_FILES})
 
 #########################################################
 
@@ -68,10 +61,10 @@ qt5_add_resources( QRC_FILES_CPP ${QRC_FILES} )
 # Runs lrelease on the specified files
 qt5_add_translation( QM_FILES ${TS_FILES} )
 
-# Define the Aquarius version string for use in source files
-# set_source_files_properties( Misc/Utility.cpp PROPERTIES COMPILE_DEFINITIONS AQUARIUS_FULL_VERSION="${AQUARIUS_FULL_VERSION}" )
-# set_source_files_properties( Dialogs/About.cpp PROPERTIES COMPILE_DEFINITIONS AQUARIUS_FULL_VERSION="${AQUARIUS_FULL_VERSION}" )
-# set_property( SOURCE Dialogs/About.cpp APPEND PROPERTY COMPILE_DEFINITIONS AQUARIUS_FULL_VERSION="${AQUARIUS_FULL_VERSION}" AQUARIUS_CODE_NAME="${AQUARIUS_CODE_NAME}" )
+# Define the Pisces version string for use in source files
+# set_source_files_properties( Misc/Utility.cpp PROPERTIES COMPILE_DEFINITIONS PISCES_FULL_VERSION="${PISCES_FULL_VERSION}" )
+# set_source_files_properties( Dialogs/About.cpp PROPERTIES COMPILE_DEFINITIONS PISCES_FULL_VERSION="${PISCES_FULL_VERSION}" )
+# set_property( SOURCE Dialogs/About.cpp APPEND PROPERTY COMPILE_DEFINITIONS PISCES_FULL_VERSION="${PISCES_FULL_VERSION}" PISCES_CODE_NAME="${PISCES_CODE_NAME}" )
 
 #########################################################
 
@@ -79,7 +72,6 @@ qt5_add_translation( QM_FILES ${TS_FILES} )
 source_group( "Form Files"        FILES ${UI_FILES} )
 source_group( "Resource Files"    FILES ${QRC_FILES} )
 source_group( "Misc"              FILES ${MISC_FILES} )
-source_group( "Book Data"         FILES ${BOOKDATA_FILES} )
 source_group( "Main UI"           FILES ${MAINUI_FILES} )
 source_group( "Main Files"        FILES ${MAIN_FILES} )
 
@@ -99,18 +91,23 @@ include_directories( BEFORE
 
 #########################################################
 
-add_executable( ${PROJECT_NAME} WIN32 ${ALL_SOURCES} )
+add_library( ${PROJECT_NAME} ${ALL_SOURCES} )
 
 if (MSVC)
     set(QT_MAIN Qt5::WinMain)
 endif()
 
-target_link_libraries( ${PROJECT_NAME} ${QT_MAIN} ${VIRGO_LIBRARIES} ${PISCES_LIBRARIES} )
+target_include_directories(${PROJECT_NAME} PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}/src
+    ${HSERVER_INCLUDE_DIRS}
+)
+
+target_link_libraries( ${PROJECT_NAME} ${QT_MAIN} ${HSERVER_LIBRARIES})
 qt5_use_modules(${PROJECT_NAME} Widgets Xml XmlPatterns PrintSupport Svg WebKit WebKitWidgets Network Concurrent Multimedia)
 
 #########################################################
 
-# Speed up string building
+# Speed up stirng building
 add_definitions( -DQT_USE_FAST_CONCATENATION )
 add_definitions( -DQT_USE_FAST_OPERATOR_PLUS )
 

@@ -55,8 +55,8 @@ set( RAW_SOURCES ${MAIN_FILES} ${EPUB_INFO_FILES} ${MISC_FILES})
 #########################################################
 
 
-# Define the Aquarius version string for use in source files
-# set_source_files_properties( Misc/Utility.cpp PROPERTIES COMPILE_DEFINITIONS AQUARIUS_FULL_VERSION="${VIRGO_FULL_VERSION}" )
+# Define the Virgo version string for use in source files
+# set_source_files_properties( Misc/Utility.cpp PROPERTIES COMPILE_DEFINITIONS VIRGO_FULL_VERSION="${VIRGO_FULL_VERSION}" )
 # set_source_files_properties( Dialogs/About.cpp PROPERTIES COMPILE_DEFINITIONS VIRGO_FULL_VERSION="${VIRGO_FULL_VERSION}" )
 # set_property( SOURCE Dialogs/About.cpp APPEND PROPERTY COMPILE_DEFINITIONS VIRGO_FULL_VERSION="${VIRGO_FULL_VERSION}" VIRGO_CODE_NAME="${VIRGO_CODE_NAME}" )
 
